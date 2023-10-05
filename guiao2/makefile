@@ -19,5 +19,5 @@ helper_functions.o: helper_functions.c
 	gcc -c ../guiao1/node.c -o ../guiao1/node.o
 
 clean:
-	rm /*.o main
+	rm *.o main
 	rm ../guiao1/deque.o ../guiao1/node.o

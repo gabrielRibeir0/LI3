@@ -45,6 +45,7 @@ void pushFront(Deque* deque, void* data){
 
 void* pop(Deque* deque){
     if(deque->size == 0){
+        printf("EMPTY\n");
         return NULL;
     }
 
@@ -67,7 +68,8 @@ void* pop(Deque* deque){
 
 void* popFront(Deque* deque){
     if(deque->size == 0){
-        return 0;
+        printf("EMPTY\n");
+        return NULL;
     }
 
     Node* aux = deque->front;

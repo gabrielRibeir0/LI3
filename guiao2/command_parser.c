@@ -1,11 +1,15 @@
 #include "command_parser.h"
 #include "helper_functions.h"
-#include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 void processCommand(Deque* deque, Cmd* cmd){
+    int len = strlen(cmd->command);
+    if(cmd->command[len-1] == '\n')
+        cmd->command[len-1] = '\0';
+    
     if(strcmp(cmd->command, "PUSH") == 0){
         for(int i = 0; i < cmd->nargs; i++){
             push(deque, &(cmd->args[i]));
@@ -23,7 +27,7 @@ void processCommand(Deque* deque, Cmd* cmd){
         popFront(deque);
     }
     else if(strcmp(cmd->command, "SIZE") == 0){
-        size(deque);
+        printf("%d\n", size(deque));
     }
     else if(strcmp(cmd->command, "REVERSE") == 0){
         reverse(deque);
@@ -32,53 +36,46 @@ void processCommand(Deque* deque, Cmd* cmd){
         printDeque(deque, &printInt);
     }
     else{
-        perror("Error: Unrecognized command");
+        printf("Error: Unrecognized command");
         return;
     }
 }
 
 int getNargs(char* line){
     char* aux;
-    strcpy(aux, line);
+    aux = strdup(line);
     int nArgs = 0;
     char* token = strsep(&aux, " ");
     while(token != NULL){
         nArgs++;
         token = strsep(&aux, " ");
     }
+    free(aux);
 
     return nArgs;
 }
 
 Cmd* parseLine(char* line){
     //create the command and read it
-    Cmd* cmd;
+    Cmd* cmd = malloc(sizeof(Cmd));
     char* token = strsep(&line, " ");
+    if(token == NULL)
+        return NULL;
+
     toUpperStr(token);
-    printf("\nteste----3\n");
-    strcpy(cmd->command, token);
-    printf("\nteste1\n");
+    cmd->command = strdup(token); //use strdup() to also allocate the memory
 
     //if the comment is PUSH or PUSH_FRONT, we need to read the arguments
-    if(strcmp(cmd->command, "PUSH") == 0 || strcmp(cmd->command,"PUSH_FRONT") == 0){
-        int read_count = 0; //number of arguments read
+    if((strcmp(cmd->command, "PUSH") == 0) || (strcmp(cmd->command,"PUSH_FRONT") == 0)){
         //get the number of arguments
         cmd->nargs = getNargs(line);
         //read and store the arguments
-        int* stored_args = malloc(cmd->nargs * sizeof(int));
+        cmd->args = malloc(cmd->nargs * sizeof(int));
         token = strsep(&line, " ");
         for(int i = 0; i < cmd->nargs; i++){
-            stored_args[0] = atoi(token);
-            read_count++;
+            cmd->args[i] = atoi(token);
             token = strsep(&line, " ");
         }
-
-        //if the number of arguments read is not correct, return an error
-        if(read_count != cmd->nargs){
-            perror("Error");
-            return NULL;
-        }
-        cmd->args = stored_args;
     }
     //if not, there are no arguments
     else{
