@@ -42,6 +42,7 @@ int main(int argc, char **argv){
     free(deque->front);
     free(deque->back);
     free(deque);
+    fclose(fp);
 
     return 0;
 }
