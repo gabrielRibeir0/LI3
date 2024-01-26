@@ -1,3 +1,1 @@
-# LI3
-
-Repositório com os guiões iniciais da UC de LI3 do ano letivo 2023/2024
+Pasta onde devem ser criados os ficheiros individuais com o resultado da execução de cada comando. Esses ficheiros não deverão ser guardaos no repositório GitHub (conforme definido no .gitignore).                                                                                                (erro ortográfico)
